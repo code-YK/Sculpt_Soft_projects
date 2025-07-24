@@ -4,13 +4,13 @@ from models.suppliers import Suppliers
 from models.warehouses import Warehouses
 from models.inventory_logs import InventoryLogs
 from models.operations import Operations
-from models.validate_input import check_int_input, check_nonempty_input, check_valid_phone
-
+from models.validate_input import Validate_Input
 
 def main():
     print("\nInventory Management System")
     db = Database()
     ops = Operations(db)
+    validator = Validate_Input()
 
     while True:
         print("\n" + "--" * 20)
@@ -29,9 +29,9 @@ def main():
 
         choice = input("Enter your choice: ")
         if choice == '1':
-            name = check_nonempty_input("Enter product name: ")
-            description = check_nonempty_input("Enter product description: ")
-            supplier_id = check_int_input("Enter supplier ID: ")
+            name = validator.check_nonempty_input("Enter product name: ")
+            description = validator.check_nonempty_input("Enter product description: ")
+            supplier_id = validator.check_int_input("Enter supplier ID: ")
             product = Products(db, name, description, supplier_id)
             product.add_product()
 
@@ -39,8 +39,8 @@ def main():
             Products.view_products(db)
 
         elif choice == '3':
-            name = check_nonempty_input("Enter supplier name: ")
-            phone = check_valid_phone("Enter supplier phone (10 digits): ")
+            name = validator.check_nonempty_input("Enter supplier name: ")
+            phone = validator.check_valid_phone("Enter supplier phone (10 digits): ")
             supplier = Suppliers(db, name, phone)
             supplier.add_supplier()
 
@@ -48,8 +48,8 @@ def main():
             Suppliers.view_suppliers(db)
         
         elif choice == '5':
-            name = check_nonempty_input("Enter warehouse name: ")
-            location = check_nonempty_input("Enter warehouse location: ")
+            name = validator.check_nonempty_input("Enter warehouse name: ")
+            location = validator.check_nonempty_input("Enter warehouse location: ")
             warehouse = Warehouses(db, name, location)
             warehouse.add_warehouse()
 
@@ -57,11 +57,11 @@ def main():
             Warehouses.view_warehouses(db)
 
         elif choice == '7':
-            product_id = check_int_input("Enter product ID: ")
-            warehouse_id = check_int_input("Enter warehouse ID: ")
-            quantity = check_int_input("Enter quantity: ")
-            change_type = check_nonempty_input("Enter change type (IN/OUT): ").strip().upper()
-            notes = check_nonempty_input("Enter notes: ")
+            product_id = validator.check_int_input("Enter product ID: ")
+            warehouse_id = validator.check_int_input("Enter warehouse ID: ")
+            quantity = validator.check_int_input("Enter quantity: ")
+            change_type = validator.check_nonempty_input("Enter change type (IN/OUT): ").strip().upper()
+            notes = validator.check_nonempty_input("Enter notes: ")
             log = InventoryLogs(db, product_id, warehouse_id, quantity, change_type, notes)
             log.add_inventory_log()
 
